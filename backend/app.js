@@ -5,9 +5,23 @@ const cookieParser = require("cookie-parser");
 
 const app = express();
 
+// Allowed origins: reads from ALLOWED_ORIGINS env variable (comma-separated).
+// Example for Railway: ALLOWED_ORIGINS=https://your-app.vercel.app
+// Falls back to localhost for local development.
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(",").map((origin) => origin.trim())
+  : ["http://localhost:3000", "http://localhost:3001"];
+
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: (origin, callback) => {
+      // Allow requests with no origin (e.g. curl, Postman, server-to-server)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error(`CORS blocked: origin ${origin} not allowed`));
+    },
     credentials: true,
   })
 );

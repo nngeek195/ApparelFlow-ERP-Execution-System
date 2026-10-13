@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-const API_URL = "http://localhost:9090";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 interface VerificationComponent {
   verification_item_id: number;

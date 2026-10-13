@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { getStoredUser } from "../../lib/auth";
 import "./supervisor.css";
 
-const API_URL = "http://localhost:9090";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 type Recipe = {
   id: number;
